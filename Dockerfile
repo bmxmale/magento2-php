@@ -8,8 +8,6 @@ ARG NR_INSTALL_SILENT=1
 ARG PATH_XDEBUG_INI="/usr/local/etc/php/conf.d/xdebug.ini.disabled"
 
 ENV NEWRELIC_APPNAME="Docker PHP - Local ENV"
-ENV SENDMAIL_HOST="MAILHOG_APP"
-ENV SENDMAIL_PORT=1025
 ENV PHP_PORT 9000
 ENV PHP_PM dynamic
 ENV PHP_PM_MAX_CHILDREN 10
@@ -17,8 +15,6 @@ ENV PHP_PM_START_SERVERS 4
 ENV PHP_PM_MIN_SPARE_SERVERS 2
 ENV PHP_PM_MAX_SPARE_SERVERS 6
 ENV TERM xterm
-
-COPY container /
 
 RUN \
     useradd -u ${MAGENTO_UID} -ms /bin/bash magento \
@@ -54,6 +50,8 @@ RUN \
         xsl \
         zip \
         opcache
+
+COPY container /
 
 RUN \
     pecl install xdebug \
