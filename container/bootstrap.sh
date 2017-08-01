@@ -2,7 +2,7 @@
 
 set -e
 
-if [ -n "${ENABLE_XDEBUG}" ] && [ "${ENABLE_XDEBUG}" == "1" ];
+if [ -n "${ENABLE_XDEBUG}" ] && [ "${ENABLE_XDEBUG}" -eq "1" ];
 then
     mv /usr/local/etc/php/conf.d/xdebug.ini.disabled /usr/local/etc/php/conf.d/xdebug.ini
 fi
