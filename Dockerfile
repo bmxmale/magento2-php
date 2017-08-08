@@ -71,6 +71,9 @@ RUN \
     crontab -u magento /etc/cron.d/magento-crons \
     && mkdir -p /var/log/supervisor
 
+RUN \
+    pear install pear/PHP_CodeSniffer
+
 CMD ["/usr/bin/supervisord"]
 
 WORKDIR ${MAGENTO_ROOT}
