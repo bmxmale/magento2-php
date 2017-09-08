@@ -1,11 +1,11 @@
-FROM php:7.0-fpm
+FROM php:7.1-fpm
 MAINTAINER Mateusz Lerczak <mlerczak@pl.sii.eu>
 
 ARG MAGENTO_UID=2000
 ARG MAGENTO_ROOT="/srv/magento2"
 ARG NR_INSTALL_KEY="aaaaabbbbbcccccdddddeeeeefffffggggghhhhh"
 ARG NR_INSTALL_SILENT=1
-ARG PATH_XDEBUG_INI="/usr/local/etc/php/conf.d/xdebug.ini.disabled"
+ARG PATH_XDEBUG_INI="/usr/local/etc/php/conf.d/xdebug.ini"
 
 ENV NEWRELIC_APPNAME="Docker PHP - Local ENV"
 ENV PHP_PORT 9000
