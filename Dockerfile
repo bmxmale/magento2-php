@@ -41,6 +41,10 @@ RUN \
     && sed -i "1izend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" ${PATH_XDEBUG_INI}
 
 RUN \
+    pecl install oauth-1.2.3 \
+    && echo "extension=$(find /usr/local/lib/php/extensions/ -name oauth.so)" > /usr/local/etc/php/conf.d/oauth.ini
+
+RUN \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && curl -sS https://files.magerun.net/n98-magerun.phar -o /usr/local/bin/magerun \
     && chmod +x /usr/local/bin/magerun
