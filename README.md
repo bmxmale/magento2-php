@@ -1,10 +1,10 @@
-# Docker image for Magento2 PHP
+# Docker image for PHP Magento 2.2
 
 Customs:
 - workdir **/srv/magento2**
 - user **magento** with uid **2000**
 - installed newrelic php agent
-- installed xdebug on port 9001 ( disabled on default)
+- installed xdebug on port 9001
 - installed composer
 - installed magerun2
 - cron with magento job

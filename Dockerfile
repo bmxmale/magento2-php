@@ -1,12 +1,13 @@
-FROM php:7.0-fpm
+FROM php:7.1-fpm
 MAINTAINER Mateusz Lerczak <mlerczak@pl.sii.eu>
 
 ARG MAGENTO_UID=2000
 ARG MAGENTO_ROOT="/srv/magento2"
 ARG NR_INSTALL_KEY="aaaaabbbbbcccccdddddeeeeefffffggggghhhhh"
 ARG NR_INSTALL_SILENT=1
-ARG PATH_XDEBUG_INI="/usr/local/etc/php/conf.d/xdebug.ini.disabled"
+ARG PATH_XDEBUG_INI="/usr/local/etc/php/conf.d/xdebug.ini"
 
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/srv/magento2/bin
 ENV NEWRELIC_APPNAME="Docker PHP - Local ENV"
 ENV PHP_PORT 9000
 ENV PHP_PM dynamic
@@ -25,7 +26,6 @@ RUN \
     && echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list \
     && apt-get update \
     && apt-get install -y \
-        cron \
         libfreetype6-dev \
         libicu-dev \
         libjpeg62-turbo-dev \
@@ -34,7 +34,9 @@ RUN \
         libxslt1-dev \
         supervisor \
         ssmtp \
-        newrelic-php5
+        newrelic-php5 \
+        nodejs \
+        npm
 
 RUN \
     docker-php-ext-configure \
@@ -68,8 +70,7 @@ RUN \
     && chmod +x /usr/local/bin/magerun2
 
 RUN \
-    crontab -u magento /etc/cron.d/magento-crons \
-    && mkdir -p /var/log/supervisor
+    mkdir -p /var/log/supervisor
 
 RUN \
     pear install pear/PHP_CodeSniffer
