@@ -7,6 +7,7 @@ ARG NR_INSTALL_KEY="aaaaabbbbbcccccdddddeeeeefffffggggghhhhh"
 ARG NR_INSTALL_SILENT=1
 ARG PATH_XDEBUG_INI="/usr/local/etc/php/conf.d/xdebug.ini"
 
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/srv/magento2/bin
 ENV NEWRELIC_APPNAME="Docker PHP - Local ENV"
 ENV PHP_PORT 9000
 ENV PHP_PM dynamic
