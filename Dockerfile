@@ -26,7 +26,6 @@ RUN \
     && echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list \
     && apt-get update \
     && apt-get install -y \
-        cron \
         libfreetype6-dev \
         libicu-dev \
         libjpeg62-turbo-dev \
@@ -35,7 +34,9 @@ RUN \
         libxslt1-dev \
         supervisor \
         ssmtp \
-        newrelic-php5
+        newrelic-php5 \
+        nodejs \
+        npm
 
 RUN \
     docker-php-ext-configure \
@@ -69,8 +70,7 @@ RUN \
     && chmod +x /usr/local/bin/magerun2
 
 RUN \
-    crontab -u magento /etc/cron.d/magento-crons \
-    && mkdir -p /var/log/supervisor
+    mkdir -p /var/log/supervisor
 
 RUN \
     pear install pear/PHP_CodeSniffer
