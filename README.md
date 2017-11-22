@@ -1,46 +1,43 @@
 # Docker image for PHP Magento 2.2
 
+Docker for build system ( Pipeline Deployment )
+
 Customs:
 - workdir **/srv/magento2**
 - user **magento** with uid **2000**
-- installed newrelic php agent
-- installed xdebug on port 9001
 - installed composer
+- installed git
 - installed magerun2
-- cron with magento job
 - ssmtp with default host MAILHOG_app
 
-```bash
-version: '3'
-services:
-  php:
-    image: bmxmale/magento2-php:latest
-    environment:
-    #  - ENABLE_XDEBUG=1
-      - NEWRELIC_APPNAME=Magento2-PHP
-      - NEWRELIC_KEY=###########################
-networks:
-    default:
-        external:
-            name: MAGENTO_network
-```
-**MailHog**
 
 ```bash
-docker stack up -c mailhog.yml MAILHOG
+docker run -v /path/to/your/magento:/srv/magento2 -v /path/to/composer/data:/home/magento/.composer -e GITHUB_OAUTH=${GITHUB_OAUTH} --rm -it bmxmale/magento2-php:2.2-build bash
 ```
 
-**mailhog.yml**
+Told composer that we will use __GITHUB_OAUTH__
+```bash
+composer config -g github-oauth.github.com ${GITHUB_OAUTH}
+```
+
+Run composer on update dir, needed for cron
+```bash
+cd update
+composer install --ignore-platform-reqs --optimize-autoloader --no-dev
+```
+
+Run composer on main dir
+```bash
+composer install --ignore-platform-reqs --optimize-autoloader --no-dev
+```
+
 
 ```bash
-version: '3'
-services:
-  app:
-    image: mailhog/mailhog
-    deploy:
-      mode: global
-networks:
-    default:
-        external:
-            name: MAGENTO_network
+php bin/magento setup:di:compile
+
+# This will work only for en_US, if you have selected other locales you need to declare it as param
+php bin/magento setup:static-content:deploy -f
 ```
+
+
+For static-content deploy on offline system you need to remove __app/etc/env.php__
