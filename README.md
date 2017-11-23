@@ -4,7 +4,7 @@ Docker for build system ( Pipeline Deployment )
 
 Customs:
 - workdir **/srv/magento2**
-- user **magento** with uid **2000**
+- user **development** with uid **1502**
 - installed composer
 - installed git
 - installed magerun2

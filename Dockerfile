@@ -1,12 +1,13 @@
 FROM php:7.1-cli
 MAINTAINER Mateusz Lerczak <mlerczak@pl.sii.eu>
 
-ARG MAGENTO_UID=2000
+ARG USER_NAME="development"
+ARG USER_UID=1502
 ARG MAGENTO_ROOT="/srv/magento2"
 
 RUN \
-    useradd -u ${MAGENTO_UID} -ms /bin/bash magento \
-    && chown -R magento:magento /srv
+    useradd -u ${USER_UID} -ms /bin/bash ${USER_NAME} \
+    && chown -R ${USER_NAME}:${USER_NAME} /srv
 
 RUN \
     apt-get update \
@@ -42,7 +43,6 @@ RUN \
     && curl -sS https://files.magerun.net/n98-magerun2.phar -o /usr/local/bin/magerun2 \
     && chmod +x /usr/local/bin/magerun2
 
-
 WORKDIR ${MAGENTO_ROOT}
 
-USER magento
+USER ${USER_NAME}
