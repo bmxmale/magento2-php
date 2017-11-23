@@ -34,6 +34,7 @@ RUN \
         soap \
         xsl \
         zip \
+        pcntl \
         opcache
 
 COPY container /
