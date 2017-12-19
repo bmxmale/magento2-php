@@ -19,7 +19,9 @@ RUN \
         libpng12-dev \
         libxslt1-dev \
         supervisor \
-        ssmtp
+        ssmtp \        
+        xvfb \
+        wkhtmltopdf
 
 RUN \
     docker-php-ext-configure \
@@ -34,9 +36,7 @@ RUN \
         soap \
         xsl \
         zip \
-        opcache \
-        xvfb \
-        wkhtmltopdf
+        opcache
 
 COPY container /
 
