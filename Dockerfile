@@ -34,7 +34,9 @@ RUN \
         soap \
         xsl \
         zip \
-        opcache
+        opcache \
+        xvfb \
+        wkhtmltopdf
 
 COPY container /
 
