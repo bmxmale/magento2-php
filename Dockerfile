@@ -36,7 +36,9 @@ RUN \
         ssmtp \
         newrelic-php5 \
         nodejs \
-        npm
+        npm \
+        xvfb \
+        wkhtmltopdf
 
 RUN \
     docker-php-ext-configure \
