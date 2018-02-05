@@ -1,6 +1,7 @@
 FROM php:7.1-fpm
 MAINTAINER Mateusz Lerczak <mlerczak@pl.sii.eu>
 
+ARG MAGENTO_USERNAME="magento"
 ARG MAGENTO_UID=2000
 ARG MAGENTO_ROOT="/srv/magento2"
 ARG NR_INSTALL_KEY="aaaaabbbbbcccccdddddeeeeefffffggggghhhhh"
@@ -9,6 +10,8 @@ ARG PATH_XDEBUG_INI="/usr/local/etc/php/conf.d/xdebug.ini"
 
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/srv/magento2/bin
 ENV NEWRELIC_APPNAME="Docker PHP - Local ENV"
+ENV PHP_USER ${MAGENTO_USERNAME}
+ENV PHP_GROUP ${MAGENTO_USERNAME}
 ENV PHP_PORT 9000
 ENV PHP_PM dynamic
 ENV PHP_PM_MAX_CHILDREN 10
@@ -17,9 +20,10 @@ ENV PHP_PM_MIN_SPARE_SERVERS 2
 ENV PHP_PM_MAX_SPARE_SERVERS 6
 ENV TERM xterm
 
+
 RUN \
-    useradd -u ${MAGENTO_UID} -ms /bin/bash magento \
-    && chown -R magento:magento /srv
+    useradd -u ${MAGENTO_UID} -ms /bin/bash ${MAGENTO_USERNAME} \
+    && chown -R ${MAGENTO_USERNAME}:${MAGENTO_USERNAME} /srv
 
 RUN \
     curl -sS https://download.newrelic.com/548C16BF.gpg | apt-key add - \
