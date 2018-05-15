@@ -48,9 +48,6 @@ RUN \
     && curl -sS https://files.magerun.net/n98-magerun2.phar -o /usr/local/bin/magerun2 \
     && chmod +x /usr/local/bin/magerun2
 
-RUN \
-    crontab -u magento /etc/cron.d/magento
-
 CMD ["/usr/bin/supervisord"]
 
 WORKDIR ${MAGENTO_ROOT}
