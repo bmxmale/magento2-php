@@ -1,15 +1,15 @@
-FROM php:7.1-fpm
+FROM php:7.2-fpm
 MAINTAINER Mateusz Lerczak <mlerczak@pl.sii.eu>
 
 ARG MAGENTO_USERNAME="magento"
-ARG MAGENTO_UID=2000
-ARG MAGENTO_ROOT="/srv/magento2"
+ARG MAGENTO_UID=1000
+ARG MAGENTO_ROOT="/srv/magento2.3"
 ARG NR_INSTALL_KEY="aaaaabbbbbcccccdddddeeeeefffffggggghhhhh"
 ARG NR_INSTALL_SILENT=1
 ARG PATH_XDEBUG_INI="/usr/local/etc/php/conf.d/xdebug.ini"
 
-ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/srv/magento2/bin
-ENV NEWRELIC_APPNAME="Docker PHP - Local ENV"
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/srv/magento2.3/bin
+ENV NEWRELIC_APPNAME="Docker PHP"
 ENV PHP_USER ${MAGENTO_USERNAME}
 ENV PHP_GROUP ${MAGENTO_USERNAME}
 ENV PHP_PORT 9000
@@ -25,24 +25,17 @@ RUN \
     useradd -u ${MAGENTO_UID} -ms /bin/bash ${MAGENTO_USERNAME} \
     && chown -R ${MAGENTO_USERNAME}:${MAGENTO_USERNAME} /srv
 
+RUN apt update \
+    && apt-get install -y gnupg2 supervisor ssmtp libjpeg-dev libpng-dev libfreetype6-dev libicu-dev libxml2-dev libxslt1-dev
+
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
+    && apt install -y nodejs
+
 RUN \
-    curl -sS https://download.newrelic.com/548C16BF.gpg | apt-key add - \
-    && echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list \
-    && apt-get update \
-    && apt-get install -y \
-        libfreetype6-dev \
-        libicu-dev \
-        libjpeg62-turbo-dev \
-        libmcrypt-dev \
-        libpng12-dev \
-        libxslt1-dev \
-        supervisor \
-        ssmtp \
-        newrelic-php5 \
-        nodejs \
-        npm \
-        xvfb \
-        wkhtmltopdf
+    curl https://download.newrelic.com/548C16BF.gpg | apt-key add - \
+    && echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' | tee /etc/apt/sources.list.d/newrelic.list \
+    && apt update \
+    && apt install -y newrelic-php5
 
 RUN \
     docker-php-ext-configure \
@@ -52,7 +45,7 @@ RUN \
         gd \
         intl \
         mbstring \
-        mcrypt \
+        hash \
         pdo_mysql \
         soap \
         xsl \
@@ -77,10 +70,15 @@ RUN \
     && chmod +x /usr/local/bin/magerun2
 
 RUN \
-    mkdir -p /var/log/supervisor
+    mkdir -p /var/log/supervisor \
+    && apt-get -y clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN \
-    pear install pear/PHP_CodeSniffer
+    curl https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar -o /usr/local/bin/phpcs \
+    && curl https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar -o /usr/local/bin/phpcbf \
+    && chmod a+x /usr/local/bin/phpcs \
+    && chmod a+x /usr/local/bin/phpcbf
 
 CMD ["/usr/bin/supervisord"]
 

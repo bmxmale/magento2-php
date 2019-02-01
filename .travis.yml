@@ -2,4 +2,4 @@ services:
   - docker
 
 script:
-  - docker build -t bmxmale/magento2-php .
+  - docker build -t bmxmale/magento2-php:2.3 . --no-cache

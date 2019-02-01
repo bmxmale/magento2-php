@@ -1,13 +1,12 @@
-# Docker image for PHP Magento 2.2
+# Docker image for PHP Magento 2.3
 
 Customs:
-- workdir **/srv/magento2**
-- user **magento** with uid **2000**
+- workdir **/srv/magento2.3**
+- user **magento** with uid **1000**
 - installed newrelic php agent
 - installed xdebug on port 9001
 - installed composer
 - installed magerun2
-- cron with magento job
 - ssmtp with default host MAILHOG_app
 
 ```bash
@@ -16,7 +15,6 @@ services:
   php:
     image: bmxmale/magento2-php:latest
     environment:
-    #  - ENABLE_XDEBUG=1
       - NEWRELIC_APPNAME=Magento2-PHP
       - NEWRELIC_KEY=###########################
 networks:
@@ -27,7 +25,7 @@ networks:
 **MailHog**
 
 ```bash
-docker stack up -c mailhog.yml MAILHOG
+docker stack up -c mailhog.yml MAILHOG_app
 ```
 
 **mailhog.yml**
