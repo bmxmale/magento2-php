@@ -7,6 +7,7 @@ ARG MAGENTO_ROOT="/srv/magento2.3"
 ARG NR_INSTALL_KEY="aaaaabbbbbcccccdddddeeeeefffffggggghhhhh"
 ARG NR_INSTALL_SILENT=1
 ARG PATH_XDEBUG_INI="/usr/local/etc/php/conf.d/xdebug.ini"
+ARG PATH_IMAGICK_INI="/usr/local/etc/php/conf.d/imagick.ini"
 
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/srv/magento2.3/bin
 ENV NEWRELIC_APPNAME="Docker PHP"
@@ -26,7 +27,9 @@ RUN \
     && chown -R ${MAGENTO_USERNAME}:${MAGENTO_USERNAME} /srv
 
 RUN apt update \
-    && apt-get install -y gnupg2 supervisor ssmtp libjpeg-dev libpng-dev libfreetype6-dev libicu-dev libxml2-dev libxslt1-dev
+    && apt-get install -y gnupg2 supervisor ssmtp libjpeg-dev libpng-dev libfreetype6-dev libicu-dev libxml2-dev libxslt1-dev imagemagick libmagickwand-dev
+
+RUN apt install -y cron
 
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
     && apt install -y nodejs
@@ -58,6 +61,11 @@ COPY container /
 RUN \
     pecl install xdebug \
     && sed -i "1izend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" ${PATH_XDEBUG_INI}
+
+RUN \
+    pecl install imagick \
+    && echo "extension=$(find /usr/local/lib/php/extensions/ -name imagick.so)" > ${PATH_IMAGICK_INI}
+
 
 RUN \
     newrelic-install install \
