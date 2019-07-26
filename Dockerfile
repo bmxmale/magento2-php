@@ -1,4 +1,4 @@
-FROM php:7.2-fpm
+FROM php:7.2-fpm-stretch
 MAINTAINER Mateusz Lerczak <mlerczak@pl.sii.eu>
 
 ARG MAGENTO_USERNAME="magento"
