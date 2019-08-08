@@ -1,5 +1,5 @@
-FROM php:7.2-fpm-stretch
-MAINTAINER Mateusz Lerczak <mlerczak@pl.sii.eu>
+FROM php:7.2-fpm-buster
+MAINTAINER Mateusz Lerczak <mateusz@lerczak.eu>
 
 ARG MAGENTO_USERNAME="magento"
 ARG MAGENTO_UID=1000
@@ -27,13 +27,13 @@ RUN \
     && chown -R ${MAGENTO_USERNAME}:${MAGENTO_USERNAME} /srv
 
 RUN apt update \
-    && apt-get install -y gnupg2 supervisor ssmtp libjpeg-dev libpng-dev libfreetype6-dev libicu-dev libxml2-dev libxslt1-dev imagemagick libmagickwand-dev
+    && apt-get install -y gnupg2 supervisor msmtp libjpeg-dev libpng-dev libfreetype6-dev libicu-dev libxml2-dev libxslt1-dev imagemagick libmagickwand-dev cron
 
-RUN apt install -y cron
-
+# NodeJS
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
     && apt install -y nodejs
 
+# NewRelic agent
 RUN \
     curl https://download.newrelic.com/548C16BF.gpg | apt-key add - \
     && echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' | tee /etc/apt/sources.list.d/newrelic.list \
@@ -65,7 +65,6 @@ RUN \
 RUN \
     pecl install imagick \
     && echo "extension=$(find /usr/local/lib/php/extensions/ -name imagick.so)" > ${PATH_IMAGICK_INI}
-
 
 RUN \
     newrelic-install install \
