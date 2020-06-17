@@ -1,5 +1,5 @@
 FROM php:7.2-fpm-stretch
-MAINTAINER Mateusz Lerczak <mlerczak@pl.sii.eu>
+MAINTAINER Mateusz Lerczak <mateusz@lerczak.eu>
 
 ARG MAGENTO_USERNAME="magento"
 ARG MAGENTO_UID=1000
@@ -27,7 +27,7 @@ RUN \
     && chown -R ${MAGENTO_USERNAME}:${MAGENTO_USERNAME} /srv
 
 RUN apt update \
-    && apt-get install -y gnupg2 supervisor ssmtp libjpeg-dev libpng-dev libfreetype6-dev libicu-dev libxml2-dev libxslt1-dev imagemagick libmagickwand-dev
+    && apt-get install -y gnupg2 supervisor ssmtp libjpeg-dev libpng-dev libfreetype6-dev libicu-dev libxml2-dev libxslt1-dev imagemagick libmagickwand-dev libsodium-dev
 
 RUN apt install -y cron
 
@@ -54,7 +54,8 @@ RUN \
         xsl \
         zip \
         pcntl \
-        opcache
+        opcache \
+        sodium
 
 COPY container /
 
